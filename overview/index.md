@@ -15,7 +15,7 @@ Istio由以下组件组成：
 - **Pilot** - 负责在运行时配置代理的组件。
 
 - **Galley** - 负责存储和分发Istio配置状态的组件。
-
+Kubernetes changed how we deploy applications. Istio is going to change how we connect, manage, and secure them.
 - **Broker** - 为基于Istio的服务实现Open Service Broker API的组件。
 
 Istio目前只支持Kubernetes平台，我们计划在不久的将来支持其他平台，如Cloud Foundry和Mesos。
@@ -63,5 +63,4 @@ Istio项目分为多个GitHub库。每个存储库包含有关如何构建和测
 - 深度遥测和报告
 
 	了解服务之间的依赖关系，它们之间的流量的性质和流程，并使用分布式跟踪快速识别问题。
-
 
