@@ -20,6 +20,13 @@ HTTP、gRPC和TCP网络流量的自动负载均衡；
 全范围（Fleet-wide）策略执行；
 深度遥测和报告。
 
+关键Istio功能:
+
+HTTP / 1.1，HTTP / 2，gRPC和TCP流量的自动区域感知负载平衡和故障切换。
+通过丰富的路由规则，容错和故障注入，对流行为的细粒度控制。
+支持访问控制，速率限制和配额的可插拔策略层和配置API。
+集群内所有流量的自动量度，日志和跟踪，包括集群入口和出口。
+安全的服务到服务身份验证，在集群中的服务之间具有强大的身份标识。
 
 ## 为什么要使用Istio？ why
 
@@ -63,11 +70,12 @@ Istio提供了一个完整的解决方案，通过为整个服务网格提供行
 
 这些功能大大减少了应用程序代码，底层平台和策略之间的耦合。这种减少的耦合不仅使服务更容易实现，而且还使运维人员更容易地在环境之间移动应用程序部署或新的策略方案。因此，结果就是应用程序从本质上变得更容易移动。
 
+
 ## istio who
 
 2017年5月,Google、IBM和Lyft开源了Istio
 
-## 平台支持
+## 支持
 
 ### 运行环境支持
 
@@ -79,12 +87,79 @@ Istio支持团队计划将其与Google Cloud Endpoints和Apigee集成。
 
 Istio 1.0版计划于今年下半年发布。
 
-- 0.1.* 版本,只支持Kubernetes
-- 0.2.0 即将发布, 也只支持Kubernetes
-- 0.3.0 roadmap说要支持k8s之外的平台, "Support for Istio meshes without Kubernetes."
+我们计划每3个月重新发布一次新版本
 
-### 平台支持。
+- 0.1 版本2017年5月发布,只支持Kubernetes
+- 0.2 即将发布, 当前是0.2.1 pre-release, 也只支持Kubernetes
+- 0.3 roadmap说要支持k8s之外的平台, "Support for Istio meshes without Kubernetes."
+- 1.0 版本预计今年年底发布 "we invite the community to join us in shaping the project as we work toward a 1.0 release later this year."
+
+### 团队支持
+
+istio的开发团队主要来自 google, IBM 和 Lyft.
+
+基于我们为内部和企业客户构建和运营大规模微服务的常见经验，Google，IBM和Lyft联手创建Istio，希望为微服务开发和维护提供可靠的基础。
+
+Google和IBM在自己的应用程序中与这些大型微服务器以及其敏感/监管环境中的企业客户有丰富的经验，而Lyft开发了Envoy来解决其内部可操作性挑战。
+
+举例,下图是istio Working Group的成员列表,
+
+![](images/working_group.jpg)
+
+总共18人,10个google和8个IBM.
+
+而Lyft的贡献主要在Envoy.
+
+#### google
+
+云服务平台产品经理 Varun Talwar
+
+Istio封装了Google一直在使用的许多最佳做法，用于在生产中运行大规模服务多年。我们很高兴为社区做出贡献，作为与Kubernetes合作的开放解决方案;
+
+Google Cloud is committed to open-source, whether it’s bringing new technologies in the open like Kubernetes or gRPC; contributing to projects like Envoy; or supporting open-source tools on Google Cloud Platform.
+
+Google hardened Envoy on several aspects related to security, performance, and scalability.
+
+- grpc 标准化RPC库
+- REST/http
+
+Istio is the latest instance of Google's continuing contribution to open-source as part of a collaborative community effort.
+
+#### IBM
+
+Jason McGee,IBM研究员，IBM云平台副总裁兼CTO:
+
+https://developer.ibm.com/dwblog/2017/istio/
+
+“IBM很高兴与Google合作推出Istio项目，并为云开发人员提供将不同的微服务转变为综合服务网格所需的工具。
+
+Istio目前在Kubernetes平台上运行，如IBM Bluemix Container Service。
 
 
+
+IBM的贡献:
+
+ In addition to developing the Istio control plane, IBM also contributed several features to Envoy such as traffic splitting across service versions, distributed request tracing with Zipkin and fault injection.
+
+#### Lyft
+
+Lyft 的经过实战测试的 Envoy 代理构建
+
+Lyft开源的Envoy在成功使用它一年以上，可以管理超过100个服务跨越10,000个虚拟机，处理2M请求/秒。
+
+### 社区支持
+
+目前已经有社区在提供对istio的支持或者集成:
+
+- Red Hat: Openshift and OpenShift Application Runtimes
+- Pivotal: Cloud Foundry
+- Weaveworks: Weave Cloud and Weave Net 2.0
+- Tigera: Project Calico Network Policy Engine
+- Datawire: Ambassador project
+
+其他外围支持:
+
+- eureka
+- consul
 
 

@@ -16,3 +16,17 @@
 
 Kubernetes changed how we deploy applications. Istio is going to change how we connect, manage, and secure them.
 
+
+## 想法
+
+正如应用程序不应该编写自己的TCP堆栈一样，他们也不应该管理自己的负载平衡逻辑或其自己的服务发现管理，或他们自己的重试和超时逻辑。
+
+### IBM
+
+https://developer.ibm.com/dwblog/2017/istio/
+
+我们亲眼目睹了我们大型企业客户走向云端的这一趋势。
+
+从Blog中得到的信息,IBM加入istio的原因和动机:
+
+We have personally witnessed this trend with our large enterprise clients as they move to the cloud. As microservices scale dynamically, problems such as service discovery, load balancing and failure recovery become increasingly important to solve uniformly. The individual development teams manage and make changes to their microservices independently, making it difficult to keep all of the pieces working together as a single unified application. Often, we see customers build custom solutions to these challenges that are unable to scale even outside of their own teams.
