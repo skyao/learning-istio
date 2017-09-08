@@ -1,165 +1,130 @@
 # 介绍
 
-## istio是什么 what?
+## istio是什么
 
-官方解释:
+istio是Google/IBM/Lyft联合开发的开源项目,2017年5月发布第一个release 0.1.0, 官方定义为:
 
-Istio：一个连接，管理和保护微服务的开放平台。
+**Istio：一个连接，管理和保护微服务的开放平台。**
 
-Istio为希腊语，意思是"sail"/“启航”。
+按照isito文档中给出的定义: Istio提供了一种轻松的方式来创建一个已部署服务的具有负载平衡，服务到服务认证，监控等等的网络，而不需要任何服务代码的改动。您可以通过在整个环境中部署一个特殊的sidecar代理来为服务增加对Istio的支持，代理拦截微服务之间的所有网络通信，使用Istio控制面板功能配置和管理代理。
+
+### 名字和图标
+
+Istio为希腊语，意思是"sail", 翻译为中文是“启航”。它的图标如下:
 
 ![](../overview/images/istio.png)
 
-Istio提供了一种轻松的方式来创建一个已部署服务的具有负载平衡，服务到服务认证，监控等等的网络，而不需要任何服务代码的改动。
+可以类比google的另外一个相关产品,Kubernetes,名字也是同样起源于古希腊，是船长或者驾驶员的意思。下图是Kubernetes的图标:
+
+![](images/k8s_logo.jpg)
+
+后面我们会看到, istio和kubernetes的关系,就像他们的名字和图标一样, 可谓"一脉相传".
 
 ### 主要特性
 
-HTTP、gRPC和TCP网络流量的自动负载均衡；
-提供了丰富的路由规则，实现细粒度的网络流量行为控制；
-流量加密、服务间认证，以及强身份声明；
-全范围（Fleet-wide）策略执行；
-深度遥测和报告。
+Istio的关键功能:
 
-关键Istio功能:
+- HTTP/1.1，HTTP/2，gRPC和TCP流量的自动区域感知负载平衡和故障切换。
+- 通过丰富的路由规则，容错和故障注入，对流行为的细粒度控制。
+- 支持访问控制，速率限制和配额的可插拔策略层和配置API。
+- 集群内所有流量的自动量度，日志和跟踪，包括集群入口和出口。
+- 安全的服务到服务身份验证，在集群中的服务之间具有强大的身份标识。
 
-HTTP / 1.1，HTTP / 2，gRPC和TCP流量的自动区域感知负载平衡和故障切换。
-通过丰富的路由规则，容错和故障注入，对流行为的细粒度控制。
-支持访问控制，速率限制和配额的可插拔策略层和配置API。
-集群内所有流量的自动量度，日志和跟踪，包括集群入口和出口。
-安全的服务到服务身份验证，在集群中的服务之间具有强大的身份标识。
+这些特性我们在稍后再详细讲解.
 
-## 为什么要使用Istio？ why
+## 为什么要使用Istio？
 
-### 需要解决的问题
+在深入istio细节之前,我们先来看看,为什么要使用Istio？它可以帮我们解决什么问题?
 
-微服务简化了开发，它将创建复杂系统的任务切分为数十乃至上百个小服务，这些小服务易于被小型的软件工程师团队所理解和修改。
+### 微服务的两面性
 
-但是微服务并未真正地消除复杂性，而是将复杂性迁移到对大量服务的连接、管理和监控上。
+最近两三年来微服务方兴未艾, 我们可以看到越来越多的公司和开发人员陆陆续续投身到微服务架构, 我们也看到一个一个的微服务项目落地.
 
-其中涉及对上百个服务的管理、处理部署问题、版本控制、安全、故障转移、策略执行、遥测和监控等，实现它们并非易事。Istio力图去解决这些问题。
+但是, 在这一片叫好的喧闹中, 我们还是发觉一些问题,普遍存在的问题: 虽然微服务对开发进行了简化，通过将复杂系统切分为若干个微服务来分解和降低复杂度，使得这些微服务易于被小型的开发团队所理解和维护。但是, 复杂度并非从此消失. 微服务拆分之后, 单个微服务的复杂度大幅降低, 但是由于系统被从一个单体拆分为几十甚至更多的微服务, 就带来了另外一个复杂度: 微服务的连接、管理和监控。
 
-Istio解决了开发人员和运维在单体应用程序向分布式微服务架构的转型中面临的许多挑战。
+试想, 对于一个大型系统, 需要对多达上百个甚至上千个微服务的管理、部署、版本控制、安全、故障转移、策略执行、遥测和监控等，谈何容易。更不要说更复杂的运维需求，例如A/B测试，金丝雀发布，限流，访问控制和端到端认证。
 
-术语服务网格通常用于描述构成这些应用程序的微服务网络以及它们之间的交互。随着服务网格的规模和复杂性的增长，它变得更难以理解和管理。
+开发人员和运维人员在单体应用程序向分布式微服务架构的转型中, 不得不面临上述挑战。
 
-它的需求包括服务发现，负载均衡，故障恢复，指标和监控，以及通常更复杂的运维需求，例如A/B测试，金丝雀发布，限流，访问控制和端到端认证。
+### 服务网络
 
-### 如何解决?
+Service Mesh, 服务网络, 也有人翻译为"服务啮合层".
 
-按Google的提法，Istio是“架构的一层，处于服务和网络间”，它“通常连同服务部署一起，统称为服务啮合层（Service Mesh）”。在Istio网站上，详细解释了“服务啮合层”这一概念：
+貌似是今年才出来的新名词?反正之前我是没有听过, 虽然类似的产品已经存在挺长时间.
 
-	如果我们可以在架构中的服务和网络间透明地注入一层，那么该层将赋予操作人员对所需功能的控制，同时将开发人员从编码实现分布式系统问题中解放出来。通常将该统一的架构层与服务部署一起，统称为一个“服务啮合层”。由于微服务有助于分离各个特性团队（Feature Team），因此服务啮合层有助于将操作人员从应用特性开发和发布过程中分离出来。通过系统地注入代理到微服务间的网络路径中，Istio将迥异的微服务转变成一个集成的服务啮合层。
+什么是Service Mesh？
 
-#### 服务网格
+- Service Mesh是专用的基础设施层。
+- 轻量级高性能网络代理。
+- 提供安全的、快速的、可靠地服务间通讯。
+- 与实际应用部署一起但对应用是透明的。
 
-Istio提供了一个完整的解决方案，通过为整个服务网格提供行为洞察和操作控制来满足微服务应用程序的多样化需求。它在服务网络中统一提供了许多关键功能：
+为了帮助理解, 下图展示了 linkerd 作为服务网格的典型部署方式:
 
-通讯管理。控制服务之间的通讯和API调用的流量，使得调用更可靠，并使网络在恶劣情况下更加健壮。
+![](images/linkerd.png)
 
-可观察性。了解服务之间的依赖关系，以及它们之间通讯的性质和流量，从而提供快速识别问题的能力。
+服务网络的话题我们今天不展开, 详细的介绍大家可以参考之前的一个网上分享和总结文章: [聊聊Service Mesh：linkerd](http://dockone.io/article/2485)
 
-策略执行。将组织策略应用于服务之间的互动，确保访问策略得到实施，资源在消费者之间分配。通过配置网格而不是修改应用程序代码来进行策略更改。
+Istio也可以视为是一种服务网格, 在Istio网站上详细解释了这一概念：
 
-服务身份和安全。在网格中的服务提供具有可验证身份，并提供保护在不同程度的可信度网络上流转的服务通讯的能力。
+	如果我们可以在架构中的服务和网络间透明地注入一层，那么该层将赋予运维人员对所需功能的控制，同时将开发人员从编码实现分布式系统问题中解放出来。通常将这个统一的架构层与服务部署在一起，统称为“服务啮合层”。由于微服务有助于分离各个功能团队，因此服务啮合层有助于将运维人员从应用特性开发和发布过程中分离出来。通过系统地注入代理到微服务间的网络路径中，Istio将迥异的微服务转变成一个集成的服务啮合层。
+
+### Istio能做什么?
+
+Istio力图去解决前面我们列出的微服务实施后需要明对的那些问题。
+
+Istio 首先是一个服务网络,但是istio又不仅仅是服务网格: 在 Linkerd, Envoy 这样的典型服务网格之上, istio提供了一个完整的解决方案，通过为整个服务网格提供行为洞察和操作控制来满足微服务应用程序的多样化需求。
+
+istio在服务网络中统一提供了许多关键功能(以下内容来自官方文档)：
+
+- 通讯管理。控制服务之间的通讯和API调用的流量，使得调用更可靠，并使网络在恶劣情况下更加健壮。
+
+- 可观察性。了解服务之间的依赖关系，以及它们之间通讯的性质和流量，从而提供快速识别问题的能力。
+
+- 策略执行。将组织策略应用于服务之间的互动，确保访问策略得到实施，资源在消费者之间分配。通过配置网格而不是修改应用程序代码来进行策略更改。
+
+- 服务身份和安全。在网格中的服务提供具有可验证身份，并提供保护在不同程度的可信度网络上流转的服务通讯的能力。
 
 除了这些行为，Istio还设计了可扩展性以满足不同的部署需求：
 
+- 平台支持。Istio旨在在各种环境中运行，包括span Cloud, on-premise，Kubernetes，Mesos等各种环境。我们最初专注于Kubernetes，但正在努力很快支持其他环境。
 
+- 集成和定制。可以扩展和定制策略执行组件，以便与现有的ACL，日志，监控，配额，审核等解决方案集成。
 
-集成和定制。可以扩展和定制策略执行组件，以便与现有的ACL，日志，监控，配额，审核等解决方案集成。
+这些功能大大减少了应用程序代码，底层平台和策略之间的耦合, 使微服务更容易实现.
 
-这些功能大大减少了应用程序代码，底层平台和策略之间的耦合。这种减少的耦合不仅使服务更容易实现，而且还使运维人员更容易地在环境之间移动应用程序部署或新的策略方案。因此，结果就是应用程序从本质上变得更容易移动。
+## 开发团队
 
+在开始介绍 istio 的架构之前, 我们再详细介绍一下 istio 的开发团队, 看看背后的大佬.
 
-## istio who
+首先, istio的开发团队主要来自 google, IBM 和 Lyft. 摘抄一段官方八股:
 
-2017年5月,Google、IBM和Lyft开源了Istio
+    基于我们为内部和企业客户构建和运营大规模微服务的常见经验，Google，IBM和Lyft联手创建Istio，希望为微服务开发和维护提供可靠的基础。
 
-## 支持
+    Google和IBM在自己的应用程序中与这些大型微服务器以及其敏感/监管环境中的企业客户有丰富的经验，而Lyft开发了Envoy来解决其内部可操作性挑战。
 
-### 运行环境支持
-
-Istio旨在在各种环境中运行，包括span Cloud, on-premise，Kubernetes，Mesos等各种环境。我们最初专注于Kubernetes，但正在努力很快支持其他环境。
-
-Istio支持团队计划将其与Google Cloud Endpoints和Apigee集成。
-
-此外，Red Hat、Pivotal、Weaveworks、Tigera和Datawire也有兴趣将自身的产品与Istio集成。
-
-Istio 1.0版计划于今年下半年发布。
-
-我们计划每3个月重新发布一次新版本
-
-- 0.1 版本2017年5月发布,只支持Kubernetes
-- 0.2 即将发布, 当前是0.2.1 pre-release, 也只支持Kubernetes
-- 0.3 roadmap说要支持k8s之外的平台, "Support for Istio meshes without Kubernetes."
-- 1.0 版本预计今年年底发布 "we invite the community to join us in shaping the project as we work toward a 1.0 release later this year."
-
-### 团队支持
-
-istio的开发团队主要来自 google, IBM 和 Lyft.
-
-基于我们为内部和企业客户构建和运营大规模微服务的常见经验，Google，IBM和Lyft联手创建Istio，希望为微服务开发和维护提供可靠的基础。
-
-Google和IBM在自己的应用程序中与这些大型微服务器以及其敏感/监管环境中的企业客户有丰富的经验，而Lyft开发了Envoy来解决其内部可操作性挑战。
-
-举例,下图是istio Working Group的成员列表,
+Google 和 IBM 相信不需要介绍了, 在 istio 项目中这两个公司是绝对主力. 随便举个例子,下图是 istio Working Group的成员列表:
 
 ![](images/working_group.jpg)
 
-总共18人,10个google和8个IBM.
+数一下, 总共18人, 10个google, 8个IBM. 注意这里没有Lyft出现, 因为Lyft的贡献主要集中在 Envoy.
 
-而Lyft的贡献主要在Envoy.
+### google
 
-#### google
+Istio 来自鼎鼎大名的 GCP / Google Cloud Platform, 这里诞生了同样大名鼎鼎的 app engine, cloud engine等重量级产品.
 
-云服务平台产品经理 Varun Talwar
+google 为 istio 带来了 Kubernetes 和 gRPC, 和 Envoy 相关的特性如安全,性能和扩展性.
 
-Istio封装了Google一直在使用的许多最佳做法，用于在生产中运行大规模服务多年。我们很高兴为社区做出贡献，作为与Kubernetes合作的开放解决方案;
+> 八卦: 负责 istio 的GCP产品经理 Varun Talwar, 同时也负责 gRPC 项目, 所以大家不用担心, istio 对 gRPC 的支持必然是没有问题的.
 
-Google Cloud is committed to open-source, whether it’s bringing new technologies in the open like Kubernetes or gRPC; contributing to projects like Envoy; or supporting open-source tools on Google Cloud Platform.
+### IBM
 
-Google hardened Envoy on several aspects related to security, performance, and scalability.
+IBM 的团队同来来自IBM云平台, IBM的贡献是:
 
-- grpc 标准化RPC库
-- REST/http
+除了开发 Istio 控制面板之外, 还有和 Envoy 相关的其他特性如跨服务版本的流量切分, 分布式请求追踪(zipkin)和失败注入.
 
-Istio is the latest instance of Google's continuing contribution to open-source as part of a collaborative community effort.
+### Lyft
 
-#### IBM
+Lyft 的贡献主要集中在 Envoy 代理, 这是 Lyft 开源的服务网络, 基于C++. 据说 Envoy 在Lyft可以管理超过100个服务, 跨越10000个虚拟机，每秒处理2百万请求。
 
-Jason McGee,IBM研究员，IBM云平台副总裁兼CTO:
-
-https://developer.ibm.com/dwblog/2017/istio/
-
-“IBM很高兴与Google合作推出Istio项目，并为云开发人员提供将不同的微服务转变为综合服务网格所需的工具。
-
-Istio目前在Kubernetes平台上运行，如IBM Bluemix Container Service。
-
-
-
-IBM的贡献:
-
- In addition to developing the Istio control plane, IBM also contributed several features to Envoy such as traffic splitting across service versions, distributed request tracing with Zipkin and fault injection.
-
-#### Lyft
-
-Lyft 的经过实战测试的 Envoy 代理构建
-
-Lyft开源的Envoy在成功使用它一年以上，可以管理超过100个服务跨越10,000个虚拟机，处理2M请求/秒。
-
-### 社区支持
-
-目前已经有社区在提供对istio的支持或者集成:
-
-- Red Hat: Openshift and OpenShift Application Runtimes
-- Pivotal: Cloud Foundry
-- Weaveworks: Weave Cloud and Weave Net 2.0
-- Tigera: Project Calico Network Policy Engine
-- Datawire: Ambassador project
-
-其他外围支持:
-
-- eureka
-- consul
-
-
+最后, 在isito的介绍完成之后, 我们开始下一节内容, istio的架构.
