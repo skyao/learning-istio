@@ -31,7 +31,7 @@ Istio 目前只支持 Kubernetes , 这是令人比较遗憾的一点. 不过 ist
 
 注: 1.0 版本的发布时间官方没有明确给出, 我只是看到官网资料里面有信息透露如下:
 
-	"we invite the community to join us in shaping the project as we work toward a 1.0 release later this year."
+> "we invite the community to join us in shaping the project as we work toward a 1.0 release later this year."
 
 按照上面给的信息,简单推算, 应该是9月发 0.2, 然后12月发 0.3, 但是这就已经是年底了, 所以不排除 1.0 推迟发布的可能, 或者 0.3 直接当成 1.0 发布.
 
