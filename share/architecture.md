@@ -56,7 +56,7 @@ Istio服务网格分为两大块:数据面板和控制面板。
 
 ![](images/arch.svg)
 
-我们刚刚介绍的 Envoy, 在istio中扮演的就是数据面板, 而其他我们下面将要陆续介绍的Mixer, Pilot和Auth属于控制面板. 上面我给出了一个类比(有点玩笑性质): istio 中 Envoy (或者说数据面板)扮演的角色是底层干活的民工, 而该让这些民工如何工作, 由包工头控制面板来负责完成.
+我们刚刚介绍的 Envoy, 在istio中扮演的就是数据面板, 而其他我们下面将要陆续介绍的Mixer, Pilot和Auth属于控制面板. 上面我给出了一个类比: istio 中 Envoy (或者说数据面板)扮演的角色是底层干活的民工, 而该让这些民工如何工作, 由包工头控制面板来负责完成.
 
 在istio的架构中,这两个模块的分工非常的清晰,体现在架构上也是经纬分明: Mixer, Pilot和Auth 这三个模块都是Go语言开发,代码托管在github上, 三个仓库分别是 istio/mixer, istio/pilot/auth. 而Envoy来自lyft, 编程语言是c++ 11, 代码托管在github但不是istio下.从团队分工看, google和IBM关注于控制面板中的Mixer, Pilot和Auth, 而Lyft继续专注于Envoy.
 
@@ -64,11 +64,13 @@ Istio的这个架构设计, 将底层service mesh的具体实现,和istio核心�
 
 ### Envoy的竞争者
 
-谈到这里, 我们聊一下目前市面上唯二的Envoy之外的另外一个service mesh成熟产品: 基于scala的 Linkerd: linkerd的功能和定位和 Envoy 非常相似, 而且就在今年上半年成功进入CNCF. 而在 istio 推出之后, linkerd做了一个很有意思的动作: istio推出了和istio的集成, 实际为替换 Envoy 作为istio的数据面板, 和istio的控制面板对接.
+谈到这里, 我们聊一下目前市面上Envoy之外的另外一个service mesh成熟产品: 基于scala的 Linkerd。 linkerd的功能和定位和 Envoy 非常相似, 而且就在今年上半年成功进入CNCF. 而在 istio 推出之后, linkerd做了一个很有意思的动作: istio推出了和istio的集成, 实际为替换 Envoy 作为istio的数据面板, 和istio的控制面板对接.
 
 回到 istio 的架构图, 将这幅图中的 Envoy 字样替换为 Linkerd 即可. 另外还有不在图中表示的 Linkerd Ingress / Linkerd Egress 用于替代 Envoy 实现 k8s 的Ingress/Egress.
 
-> 注: 一出小三上位原配出局的狗血剧情貌似正在酝酿中. 结局如何我等不妨拭目以待. 还是那句话: 没有挖不倒的墙角, 只有不努力的小三! Linkerd, 加油!
+本周最新消息： nginx推出了自己的服务网格产品nginmesh，功能类似，比较有意思的地方是ngxinmesh一出来就直接宣布要和istio集成，替换Envoy。有兴趣的同学可以去见我本周翻译转载的新闻 [nginx发布微服务平台,OpenShift Ingress控制器和服务网格预览](https://mp.weixin.qq.com/s?__biz=MzIwMzYyNTcyNA==&mid=2247483742&idx=1&sn=308a6d1637c7211fe1c1a7b977f2d0ba&chksm=96cdc4cda1ba4ddbe83bced00a091af10f7bbcb507a00718e8a943f296e6900a5e1d017d829c&mpshare=1&scene=1&srcid=0920cQrJVxSsyMaBtg4okXvB&pass_ticket=Gr9AneZQDm6JATVKmC4oic5repkOWhnqW%2F00LhLI2FH%2Buur%2FfIkMEFVB7h9KdkUs#rd)
+
+> 注: 一出小三上位原配出局的狗血剧情貌似正在酝酿中. 结局如何我等不妨拭目以待. 还是那句话: 没有挖不倒的墙角, 只有不努力的小三! Linkerd，nginmesh，加油!
 
 下面开始介绍 istio 中最核心的控制面板.
 
@@ -305,3 +307,4 @@ auth在目前的istio版本(0.1.6和即将发布的0.2)中,功能还不是很全
 - 中间代理支持
 - 可插拔密钥管理组件
 
+注意这些功能都是不改动业务应用代码的前提下实现的。
