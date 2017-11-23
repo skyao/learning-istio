@@ -15,21 +15,16 @@
     },
   "plugins": [
     "theme-comscore",
-    "callouts",
     "splitter",
     "-sharing",
+    "-search",
     "edit-link",
-    "wide-page",
-    "back-to-top-button",
-    "tags"
+    "back-to-top-button"
   ],
   "pluginsConfig": {
     "edit-link": {
         "base": "https://github.com/skyao/learning-istio/edit/master",
         "label": "Edit"
-    },
-    "callouts": {
-        "showTypeInHeader": false
     }
   },
   "title": "Istio学习笔记",
