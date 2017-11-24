@@ -4,6 +4,14 @@
 
 安装最新版本的 Minikube。
 
+详细见[Minikube安装](https://skyao.gitbooks.io/learning-kubernetes/installation/minikube.html)
+
+启动minikube的命令：
+
+```bash
+minikube start --docker-env http_proxy=http://192.168.31.152:8123 --docker-env https_proxy=http://192.168.31.152:8123 --docker-env no_proxy=localhost,127.0.0.1,::1,192.168.31.0/24,192.168.99.0/24
+```
+
 ## 准备istio
 
 参考：
