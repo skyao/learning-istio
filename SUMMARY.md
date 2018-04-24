@@ -9,6 +9,9 @@
   * [Eureka实现](serviceregistry/eureka.md)
   * [Consul实现](serviceregistry/consul.md)
   * [外部服务](serviceregistry/external-service.md)
-
-
+* [Mixer](mixer/index.md)
+  * [Mixer Cache](mixer/cache/index.md)
+    * [check_cache源码](mixer/cache/source_check_cache.md)
+    * [reference源码](mixer/cache/source_referenced.md)
+    * [全局字典](mixer/cache/global_dictionary.md)
 
