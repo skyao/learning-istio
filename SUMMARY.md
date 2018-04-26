@@ -14,4 +14,6 @@
     * [check_cache源码](mixer/cache/source_check_cache.md)
     * [reference源码](mixer/cache/source_referenced.md)
     * [全局字典](mixer/cache/global_dictionary.md)
-
+* [Proxy](proxy/index.md)
+  * [Develop](proxy/develop/index.md)
+    * [build](proxy/develop/build.md)
