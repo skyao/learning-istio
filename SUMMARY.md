@@ -15,5 +15,6 @@
     * [reference源码](mixer/cache/source_referenced.md)
     * [全局字典](mixer/cache/global_dictionary.md)
 * [Proxy](proxy/index.md)
-  * [Develop](proxy/develop/index.md)
-    * [build](proxy/develop/build.md)
+  * [开发](proxy/develop/index.md)
+    * [构建proxy项目](proxy/develop/build.md)
+    * [使用Clion](proxy/develop/clion.md)
