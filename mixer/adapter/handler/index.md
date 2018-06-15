@@ -1,6 +1,6 @@
 # Mixer Adapter Handler
 
-Handler用来配置Mixer Adaper。
+Handler用来配置Mixer Adaper，或者直白说：Handler就是适配器的配置。
 
 > Mixer 使用的每个适配器都需要一些配置来进行操作。一般来说适配器需要一些数据进行实例化，例如后端的 URL、认证信息、缓存选项等等。每个适配器使用 [protobuf](https://developers.google.com/protocol-buffers/) 消息来定义所需的配置数据。
 > 

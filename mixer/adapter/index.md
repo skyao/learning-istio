@@ -27,7 +27,53 @@ Adapter的哲学:
 
 > 配置是一个复杂的任务。有证据表明，绝大多数的服务中断都来自于配置错误。为了解决这一问题，Mixer 加入了很多限制来避免错误。例如在配置中使用强类型，以此保障在任何上下文中都只能使用有意义的属性或表达式。
 
+## Adapter信息
 
+每个adapter的GetInfo()方法返回该adapter实现关联的信息，如：
+
+```go
+func GetInfo() adapter.Info {
+	return adapter.Info{
+		Name:        "bypass", // Adapter名称
+		Impl:        "istio.io/istio/mixer/adapter/bypass", // Adapter实现
+		Description: "Calls gRPC backends via the inline adapter model (useful for testing)", // Adapter描述
+		SupportedTemplates: []string{  // Adapter支持的模板
+			checknothing.TemplateName,
+			reportnothing.TemplateName,
+			metric.TemplateName,
+			quota.TemplateName,
+		},
+		DefaultConfig: &config.Params{},
+		NewBuilder:    func() adapter.HandlerBuilder { return &builder{} },
+	}
+}
+```
+
+
+
+## 已有的Adapter
+
+| Adapter名称       | Adapter描述          | 支持的模板                                                   | 模板品类                     |
+| ----------------- | -------------------- | ------------------------------------------------------------ | ---------------------------- |
+| bypass            |                      | checknothing, reportnothing, metric, quota                   | CHECK, REPORT, REPORT, QUOTA |
+| circonus          |                      | metric                                                       | REPORT                       |
+| cloudwatch        |                      | metric                                                       | REPORT                       |
+| denier            |                      | checknothing, listentry, quota                               | CHECK, QUOTA                 |
+| dogstatsd         |                      | metric                                                       | REPORT                       |
+| fluentd           |                      | logentry                                                     | REPORT                       |
+| kubernetesenv     |                      | kubernetesenv                                                | ATTRIBUTE_GENERATOR          |
+| listchecker(list) |                      | listentry                                                    | CHECK                        |
+| memquota          |                      | quota                                                        | QUOTA                        |
+| noop              | 空操作，支持所有模板 | authorization, checknothing, reportnothing, listentry, logentry, metric, quota, tracespan | 所有                         |
+| opa               |                      | authorization                                                | CHECK                        |
+| prometheus        |                      | metric                                                       | REPORT                       |
+| rbac              |                      | authorization                                                | CHECK                        |
+| redisquota        |                      | quota                                                        | QUOTA                        |
+| servicecontrol    |                      | apikey, servicecontrolreport, quota                          | CHECK, REPORT, QUOTA         |
+| solarwinds        |                      | metric, logentry                                             | REPORT                       |
+| stackdriver       |                      | metric, logentry, tracespan                                  | REPORT                       |
+| statsd            |                      | metric                                                       | REPORT                       |
+| stdio             |                      | logentry, metric                                             | REPORT                       |
 
 
 
