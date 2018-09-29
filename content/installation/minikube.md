@@ -1,4 +1,14 @@
-# 安装
+---
+date: 2018-09-29T20:00:00+08:00
+title: minikube安装
+weight: 202
+menu:
+  main:
+    parent: "installation"
+keywords:
+- minikube安装istio
+description : "使用minikube安装istio"
+---
 
 ## 准备Minikube
 

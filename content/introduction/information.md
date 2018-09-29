@@ -1,4 +1,18 @@
-# 资料
+---
+date: 2018-09-29T20:00:00+08:00
+title: 资料
+weight: 101
+menu:
+  main:
+    parent: "introduction"
+keywords:
+- Istio资料
+- 官方资料
+- 社区资料
+- 学习资料
+description : "收集Istio的各种资料"
+---
+
 
 ## 官方资料
 
@@ -6,7 +20,9 @@
 - [github项目](https://github.com/istio/istio)
 - [官方博客](https://istio.io/blog/)
 
-## 介绍资料
+## 社区资料
+
+## 学习资料
 
 * 2017-07
 

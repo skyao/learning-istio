@@ -1,6 +1,16 @@
-# Istio学习笔记
+---
+date: 2018-09-08T21:07:13+01:00
+title: 前言
+weight: 1
+keywords:
+- istio
+- 学习笔记
+- service mesh
+- 服务网格
+description : "介绍Istio学习笔记的基本资料和访问方式"
+---
 
-![](content/introduction/images/logo.png)
+![](introduction/images/logo.png)
 
 ### 内容介绍
 
@@ -17,8 +27,3 @@ Istio是一个连接，管理和保护微服务的开放平台。
 
 本笔记内容可以任意转载，但请注明来源并提供链接，**请勿用于商业出版**。
 
-### 格式说明
-
-笔记原是基于gitbook构建，由于gitbook本地编辑时生成内容的速度太慢，而gitbook网站的访问速度不理想，还经常被墙。
-
-因此不得已改为hugo格式并独立托管。gitbook上不再生成内容，只保留链接信息以供跳转，请使用在线阅读方式。

@@ -1,4 +1,17 @@
-# referenced源码
+---
+date: 2018-09-29T21:00:00+08:00
+title: referenced源码
+weight: 323
+menu:
+  main:
+    parent: "mixercache"
+keywords: 
+- mixer cache
+- referenced
+- istio源码
+description : "介绍Istio中的全局字典"
+---
+
 
 源文件路径为：
 
