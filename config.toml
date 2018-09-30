@@ -102,6 +102,20 @@ googleAnalytics = "c7442f5794ea2abb71c6ff05dc0b8779"
 	url    = "/ecosystem/"
 	weight = 700
 
+[[menu.main]]
+	name   = "Kiali"
+	identifier = "kiali"
+	parent = "ecosystem"
+	url    = "/ecosystem/kiali/"
+	weight = 720
+
+[[menu.main]]
+	name   = "Maistra"
+	identifier = "maistra"
+	parent = "ecosystem"
+	url    = "/ecosystem/maistra/"
+	weight = 730
+
 [blackfriday]
 	smartypants	= true
 	fractions = true
