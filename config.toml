@@ -1,5 +1,7 @@
 baseurl = "http://localhost:1313/"
 languageCode = "zh-cn"
+uglyurls = true
+relativeURLs=false
 title = "Istio学习笔记"
 theme = "hugo-material-docs"
 metadataformat = "yaml"
@@ -14,7 +16,7 @@ googleAnalytics = "c7442f5794ea2abb71c6ff05dc0b8779"
 	# General information
 	author = "敖小剑"
 	keywords = "Istio,service mesh,服务网格,学习笔记,敖小剑"
-	description = "Istio学习笔记"
+	description = "Istio是一个连接，管理和保护微服务的开放平台。"
 	copyright = "版权所有，转载请注明出处"
 
 	# Repository
