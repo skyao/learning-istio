@@ -121,6 +121,19 @@ googleAnalytics = "c7442f5794ea2abb71c6ff05dc0b8779"
 	url    = "/ecosystem/maistra/"
 	weight = 730
 
+[[menu.main]]
+	name   = "Istio CRD"
+	identifier = "crd"
+	url    = "/crd/"
+	weight = 2000
+
+[[menu.main]]
+	name   = "Network CRD"
+	identifier = "crd-network"
+	parent = "crd"
+	url    = "/crd/network/"
+	weight = 2010
+
 [blackfriday]
 	smartypants	= true
 	fractions = true
