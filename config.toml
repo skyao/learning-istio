@@ -134,6 +134,13 @@ googleAnalytics = "c7442f5794ea2abb71c6ff05dc0b8779"
 	url    = "/crd/network/"
 	weight = 2010
 
+[[menu.main]]
+	name   = "Authentication CRD"
+	identifier = "crd-authentication"
+	parent = "crd"
+	url    = "/crd/authentication/"
+	weight = 2020
+
 [blackfriday]
 	smartypants	= true
 	fractions = true
