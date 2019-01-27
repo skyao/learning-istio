@@ -19,6 +19,12 @@ description : "使用minikube安装istio"
 启动minikube的命令：
 
 ```bash
+minikube start
+```
+
+如果需要翻墙：
+
+```bash
 minikube start --docker-env http_proxy=http://192.168.31.152:8123 --docker-env https_proxy=http://192.168.31.152:8123 --docker-env no_proxy=localhost,127.0.0.1,::1,192.168.31.0/24,192.168.99.0/24
 ```
 
@@ -26,41 +32,47 @@ minikube start --docker-env http_proxy=http://192.168.31.152:8123 --docker-env h
 
 参考：
 
-- http://istio.doczh.cn/docs/setup/kubernetes/quick-start.html
+- https://istio.io/docs/setup/kubernetes/download-release/
+- https://istio.io/docs/setup/kubernetes/quick-start/
 
 在linux上执行以下命令：
 
 ```bash
 curl -L https://git.io/getLatestIstio | sh -
-sudo mv istio-0.2.12/ /usr/local/share/istio
+sudo mv istio-1.0.5/ $HOME/work/soft/istio/
 ```
 
-修改`/etc/profile`，加入一下内容：
+修改`~/.bashrc`，加入以下内容：
 
 ```bash
 # istio
-export PATH=/usr/local/share/istio/bin:$PATH
+export PATH="$PATH:/home/sky/work/soft/istio/bin"
 ```
 
-执行`source /etc/profile`载入profile。
+执行`source ~/.bashrc`载入profile。
 
 ```bash
 $ istioctl version
-Version: 0.2.12
-GitRevision: 998e0e00d375688bcb2af042fc81a60ce5264009
-GitBranch: release-0.2
-User: releng@0d29a2c0d15f
-GolangVersion: go1.8.3
+Version: 1.0.5
+GitRevision: c1707e45e71c75d74bf3a5dec8c7086f32f32fad
+User: root@6f6ea1061f2b
+Hub: docker.io/istio
+GolangVersion: go1.10.4
+BuildStatus: Clean
 ```
 
 ## 安装istio核心
 
-简单起见，不做双向认证。方便期间，安装istio-initializer以便自动注入envoy。
+先安装istio的CRD：
 
 ```bash
-cd /usr/local/share/istio/
-kubectl apply -f install/kubernetes/istio.yaml
-kubectl apply -f install/kubernetes/istio-initializer.yaml
+kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml
+```
+
+简单起见，不做双向认证。
+
+```bash
+kubectl apply -f install/kubernetes/istio-demo.yaml
 ```
 
 验证安装：
@@ -68,16 +80,6 @@ kubectl apply -f install/kubernetes/istio-initializer.yaml
 ```bash
 kubectl get svc -n istio-system
 kubectl get pods -n istio-system
-```
-
-## 指南实战
-
-参照官方文档指南篇，开始运行其中的例子。
-
-其中bookinf中，有个命令有误，需要增加`-n istio-system`指定namespace。
-
-```bash
- export GATEWAY_URL=$(kubectl get po -l istio=ingress -n istio-system -o 'jsonpath={.items[0].status.hostIP}'):$(kubectl get svc istio-ingress -n istio-system -o 'jsonpath={.spec.ports[0].nodePort}')
 ```
 
 
