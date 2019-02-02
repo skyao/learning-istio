@@ -5,8 +5,6 @@ weight: 202
 menu:
   main:
     parent: "installation"
-keywords:
-- minikube安装istio
 description : "使用minikube安装istio"
 ---
 

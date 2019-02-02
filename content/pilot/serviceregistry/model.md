@@ -1,4 +1,13 @@
-# 抽象模型
+---
+date: 2019-02-02T09:00:00+08:00
+title: 抽象模型
+weight: 411
+menu:
+  main:
+    parent: "pilot-serviceregistry"
+description : "Pilot 服务注册与发现的抽象模型"
+---
+
 
 istio中，定义了一套服务注册的抽象模型，具体在文件｀istio/pilot/pkg/model/service.go｀中定义。
 

@@ -90,6 +90,20 @@ googleAnalytics = "c7442f5794ea2abb71c6ff05dc0b8779"
 	weight = 400
 
 [[menu.main]]
+	name   = "Service Registry"
+	identifier = "pilot-serviceregistry"
+	parent = "pilot"
+	url    = "/pilot/serviceregistry/"
+	weight = 410
+
+[[menu.main]]
+	name   = "Pilot新动态"
+	identifier = "pilot-trend"
+	parent = "pilot"
+	url    = "/pilot/trend/"
+	weight = 450
+
+[[menu.main]]
 	name   = "Mixer"
 	identifier = "mixer"
 	url    = "/mixer/"
