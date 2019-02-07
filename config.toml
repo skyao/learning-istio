@@ -28,10 +28,10 @@ googleAnalytics = "c7442f5794ea2abb71c6ff05dc0b8779"
 	favicon = ""
 	
 	permalink = "#"
-
-    # reward button, comment this to disable it
-    reward = true
-
+	
+	# reward button, comment this to disable it
+	reward = true
+	
 	# Custom assets
 	custom_css = []
 	custom_js  = []
@@ -90,18 +90,32 @@ googleAnalytics = "c7442f5794ea2abb71c6ff05dc0b8779"
 	weight = 400
 
 [[menu.main]]
-	name   = "Service Registry"
-	identifier = "pilot-serviceregistry"
+	name   = "Pilot Discovery"
+	identifier = "pilot-discovery"
 	parent = "pilot"
-	url    = "/pilot/serviceregistry/"
+	url    = "/pilot/discovery/"
 	weight = 410
+
+[[menu.main]]
+	name   = "Pilot Agent"
+	identifier = "pilot-agent"
+	parent = "pilot"
+	url    = "/pilot/agent/"
+	weight = 430
+
+[[menu.main]]
+	name   = "Sidecar Injector"
+	identifier = "pilot-injector"
+	parent = "pilot"
+	url    = "/pilot/injector/"
+	weight = 450
 
 [[menu.main]]
 	name   = "Pilot新动态"
 	identifier = "pilot-trend"
 	parent = "pilot"
 	url    = "/pilot/trend/"
-	weight = 450
+	weight = 490
 
 [[menu.main]]
 	name   = "Mixer"
