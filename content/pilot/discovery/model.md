@@ -349,7 +349,7 @@ type Labels map[string]string
 ｝
 ```
 
-## 总结
+## 服务模型总结
 
 Istio定义了服务的抽象模型，包括 Service 和 ServiceInstance，和通常的服务注册发现系统定义的服务模型相比，不同的地方主要有：
 
@@ -401,9 +401,9 @@ MeshExternal 属性表示服务在mesh之外，也就是在当前Istio的服务�
 
 Istio的这个设计，使得 ServicePort 在进行服务发现时显得特别的重要，在后面一节讲述 Istio 的服务发现接口时再仔细介绍。
 
-## 补充
+## 服务模型补充
 
-###IstioEndpoint
+### IstioEndpoint
 
 IstioEndpoint 具有关于特定服务和分片的单个地址+端口的信息。 
 
@@ -433,3 +433,105 @@ IstioEndpoint 的特别说明：
 -  没有指向Service的指针 - 在收到端点时可能无法使用完整的Service对象。 服务名称作为key用于协调。
 -  它有一个缓存的 EnvoyEndpoint 对象 - 以避免为每个请求和客户端重新分配它。
 
+## Proxy定义
+
+Proxy的定义在文件 `pilot/pkg/model/context.go` 中。虽然 Proxy 的定义不是服务发现的直接组成部分，但是后面发现服务发现的接口中明确出现了Proxy的信息，因此还是将Proxy的定义加进来。
+
+Proxy包含有关代理的特定实例（envoy sidecar，Gateway等）的信息。 当Sidecar连接到Pilot时，代理被初始化，并从协议中的“node”信息以及从注册表中提取的数据填充。
+
+在当前的Istio实现节点中，使用4部分'〜'分隔的ID。格式为 "Type~IPAddress~ID~Domain"。
+
+```go
+type Proxy struct {
+	// ClusterID 指定代理所在的集群
+	// TODO: clarify if this is needed in the new 'network' model, likely needs to be renamed to 'network'
+	ClusterID string
+
+	// Type 指定node类型。是 ID 的第一部分
+	Type NodeType
+
+	// IPAddresses 是 proxy 用来标识自身和同处一地的服务实例的 IP 地址. 如: "10.60.1.6". 在某些情况下，proxy和服务实例所在的 host 可能有多个IP地址In
+	IPAddresses []string
+
+	// ID 是平台特有的sidecar proxy id。对于 k8s，是 pod id 和 namespace。
+	ID string
+
+	// Locality 是 envoy proxy 运行的位置
+	Locality Locality
+
+	// DNSDomain 为短主机名定义 DNS 域名后缀(如 "default.svc.cluster.local")
+	DNSDomain string
+
+	// TrustDomain 定义证书的信任域名
+	TrustDomain string
+
+	// ConfigNamespace 定义proxy所在的 namespace，用于网络范围目的
+	// NOTE: DO NOT USE THIS FIELD TO CONSTRUCT DNS NAMES
+	ConfigNamespace string
+
+	// Metadata 是用于扩展 node 标识符的键值对
+	Metadata map[string]string
+
+	// 和proxy关联的 sidecarScope
+	SidecarScope *SidecarScope
+}
+```
+
+Node type的定义有：
+
+```go
+// NodeType 决定 proxy 在mesh网络中的责任
+type NodeType string
+
+const (
+	// SidecarProxy 类型用于在应用容器中的sidecar proxy
+	SidecarProxy NodeType = "sidecar"
+
+	// Ingress 类型用于集群的 ingress proxies
+	Ingress NodeType = "ingress"
+
+	// Router 类型用于以 L7/L4 路由器方式工作的独立代理
+	Router NodeType = "router"
+)
+```
+
+特意看了一下 Router 类型，支持以下 RouterMode：
+
+```go
+// RouterMode 决定 Istio Gateway 的行为 (普通 或者 sni-dnat)
+type RouterMode string
+
+const (
+	// StandardRouter 是普通的网关模式
+	StandardRouter RouterMode = "standard"
+
+	// SniDnatRouter 用于桥接两个网络
+	SniDnatRouter RouterMode = "sni-dnat"
+)
+```
+
+用于桥接两个网络的 SniDnatRouter ，非常有意思，稍后细看。
+
+## Controller定义
+
+Controller定义了一个事件控制器循环。Proxy Agent 向控制器循环注册自身，并接收有关服务拓扑更改或配置工件更改的通知。
+
+控制器保证以下一致性要求：控制器中的注册表视图与当前通知到达时一样新鲜，但可能更新鲜（例如“DELETE”取消“ADD”事件）。例如，创建服务的事件将看到注册表中没有这个服务，如果紧跟这个事件之后有服务删除事件。
+
+Handler 按照它们附加的顺序在单个工作队列上执行。
+
+Handler 接收通知事件和关联的对象。请注意，必须在启动控制器之前附加所有处理程序。
+
+
+```go
+type Controller interface {
+	// AppendServiceHandler 通知和服务目录相关的变更
+	AppendServiceHandler(f func(*Service, Event)) error
+
+	// AppendInstanceHandler 通知和服务的服务实例相关的变更
+	AppendInstanceHandler(f func(*ServiceInstance, Event)) error
+
+	// 运行直到接收到信号
+	Run(stop <-chan struct{})
+}
+```
