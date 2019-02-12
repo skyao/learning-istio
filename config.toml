@@ -71,6 +71,19 @@ googleAnalytics = "c7442f5794ea2abb71c6ff05dc0b8779"
 	weight = 200
 
 [[menu.main]]
+	name   = "API"
+	identifier = "api"
+	url    = "/api/"
+	weight = 220
+
+[[menu.main]]
+	name   = "MCP API"
+	identifier = "api-mcp"
+	parent = "api"
+	url    = "/api/mcp"
+	weight = 260
+
+[[menu.main]]
 	name   = "Proxy"
 	identifier = "proxy"
 	url    = "/proxy/"
