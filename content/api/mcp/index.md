@@ -62,7 +62,8 @@ ResourceSource 和 ResourceSink 服务对于消息交换在语义上是等同的
 sink 是gRPC客户端的服务。 sink 负责启动连接和打开流。
 
 ```proto
-// Sink，作为gRPC客户端，与 source 建立新的资源流。Sink 向 source 发送 RequestResources 消息并从源接收 Resources 消息。
+// Sink，作为gRPC客户端，与 source 建立新的资源流。
+// Sink 向 source 发送 RequestResources 消息并从源接收 Resources 消息。
 rpc EstablishResourceStream(stream RequestResources) returns (stream Resources) {}
 ```
 
@@ -71,7 +72,8 @@ rpc EstablishResourceStream(stream RequestResources) returns (stream Resources) 
 source 是gRPC客户端的服务。 source 负责启动连接和打开流。
 
 ```proto
-// source，作为gRPC客户端，与 sink 建立新的资源流。Sink 向 source 发送 RequestResources 消息并从源接收 Resources 消息。
+// source，作为gRPC客户端，与 sink 建立新的资源流。
+// Sink 向 source 发送 RequestResources 消息并从源接收 Resources 消息。
 rpc EstablishResourceStream(stream Resources) returns (stream RequestResources) {}
 ```
 
@@ -81,13 +83,17 @@ A RequestResource can be sent in two situations:
 
 Initial message in an MCP bidirectional change stream as an ACK or NACK response to a previous Resources. In this case the response*nonce is set to the nonce value in the Resources. ACK/NACK is determined by the presence of error*detail.
 
+RequestResource可以在两种情况下发送：
+
+MCP双向更改流中的初始消息，和作为对先前资源的ACK或NACK响应。 在这种情况下，responsenonce设置为Resources中的nonce值。 ACK/NACK由errordetail的存在确定。
+
 - ACK (nonce!=“”,error_details==nil)
 - NACK (nonce!=“”,error_details!=nil)
 - New/Update request (nonce==“”,error_details ignored)
 
 | Field                     | Type                  | Description                                                  |
 | ------------------------- | --------------------- | ------------------------------------------------------------ |
-| `sinkNode`                | `SinkNode`            | The sink node making the request.                            |
+| `sinkNode`                | `SinkNode`            | 发起请求的 sink node                                         |
 | `collection`              | `string`              | Type of resource collection that is being requested, e.g.istio/networking/v1alpha3/VirtualService k8s// |
 | `initialResourceVersions` | `map<string, string>` | When the RequestResources is the first in a stream, the initial*resource*versions must be populated. Otherwise, initial*resource*versions must be omitted. The keys are the resources names of the MCP resources known to the MCP client. The values in the map are the associated resource level version info. |
 | `responseNonce`           | `string`              | When the RequestResources is an ACK or NACK message in response to a previous RequestResources, the response*nonce must be the nonce in the RequestResources. Otherwise response*nonce must be omitted. |
