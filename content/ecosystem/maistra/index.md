@@ -1,11 +1,7 @@
 ---
 date: 2018-09-30T16:00:00+08:00
 title: Maistra
-weight: 730
-keywords:
-- maistra
-- istio生态
-- istio合作伙伴
+weight: 2030
 description : "基于istio的maistra项目介绍"
 ---
 

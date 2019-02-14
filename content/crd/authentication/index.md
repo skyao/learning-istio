@@ -1,7 +1,7 @@
 ---
 date: 2018-09-29T20:00:00+08:00
 title: Istio Authentication CRD
-weight: 2020
+weight: 420
 description : "介绍istio的authentication CRD"
 ---
 

@@ -1,12 +1,10 @@
 ---
 date: 2018-09-30T17:00:00+08:00
 title: kiali架构
-weight: 723
+weight: 2023
 menu:
   main:
     parent: "kiali"
-keywords:
-- kiali架构
 description : "描述kiali的架构"
 ---
 

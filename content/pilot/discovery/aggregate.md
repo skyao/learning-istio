@@ -1,7 +1,7 @@
 ---
 date: 2019-02-02T09:00:00+08:00
 title: 聚合
-weight: 419
+weight: 519
 menu:
   main:
     parent: "pilot-discovery"

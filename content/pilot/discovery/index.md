@@ -1,7 +1,7 @@
 ---
 date: 2019-02-02T09:00:00+08:00
 title: Pilot Discovery
-weight: 410
+weight: 510
 description : "介绍istio的Pilot Discovery"
 ---
 

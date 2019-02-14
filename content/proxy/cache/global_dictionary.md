@@ -1,12 +1,10 @@
 ---
 date: 2018-09-29T21:00:00+08:00
 title: 全局字典
-weight: 323
+weight: 823
 menu:
   main:
     parent: "mixercache"
-keywords:
-- envoy proxy
 description : "介绍Istio中的全局字典"
 ---
 

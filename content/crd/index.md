@@ -1,7 +1,7 @@
 ---
 date: 2018-12-26T18:00:00+08:00
-title: Istio CRD
-weight: 2000
+title: CRD
+weight: 400
 description : "介绍istio的CRD"
 ---
 

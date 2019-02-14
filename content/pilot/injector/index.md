@@ -1,7 +1,7 @@
 ---
 date: 2019-02-07T10:00:00+08:00
 title: Sidecar Injector
-weight: 450
+weight: 550
 description : "介绍istio的Pilot Sidecar Injector"
 ---
 

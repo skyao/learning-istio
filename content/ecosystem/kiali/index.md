@@ -1,11 +1,7 @@
 ---
 date: 2018-09-30T14:00:00+08:00
 title: kiali
-weight: 720
-keywords:
-- kiali
-- istio UI
-- istio管理界面
+weight: 2020
 description : "介绍istio的UI管理界面kiali"
 ---
 

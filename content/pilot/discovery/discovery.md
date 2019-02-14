@@ -1,7 +1,7 @@
 ---
 date: 2019-02-07T18:00:00+08:00
 title: 服务发现接口
-weight: 412
+weight: 512
 menu:
   main:
     parent: "pilot-discovery"

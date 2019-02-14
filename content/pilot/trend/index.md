@@ -1,7 +1,7 @@
 ---
 date: 2019-02-02T09:00:00+08:00
 title: Pilot新动向
-weight: 490
+weight: 590
 description : "介绍istio的Pilot组件的新动向"
 ---
 

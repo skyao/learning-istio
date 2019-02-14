@@ -1,7 +1,7 @@
 ---
 date: 2019-02-02T09:00:00+08:00
 title: "Proposal: Pilot Decomposition"
-weight: 492
+weight: 592
 menu:
   main:
     parent: "pilot-trend"

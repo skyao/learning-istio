@@ -1,12 +1,10 @@
 ---
 date: 2018-09-30T16:00:00+08:00
 title: kiali概述
-weight: 721
+weight: 2021
 menu:
   main:
     parent: "kiali"
-keywords:
-- kiali概述
 description : "kiali概述，介绍kiali的基本情况和功能列表"
 ---
 

@@ -1,7 +1,7 @@
 ---
 date: 2018-09-29T20:00:00+08:00
 title: MCP API
-weight: 260
+weight: 360
 description : "介绍istio的MCP API"
 ---
 
@@ -94,13 +94,13 @@ MCP双向更改流中的初始消息，和作为对先前资源的ACK或NACK响�
 | Field                     | Type                  | Description                                                  |
 | ------------------------- | --------------------- | ------------------------------------------------------------ |
 | `sinkNode`                | `SinkNode`            | 发起请求的 sink node                                         |
-| `collection`              | `string`              | Type of resource collection that is being requested, e.g.istio/networking/v1alpha3/VirtualService k8s// |
-| `initialResourceVersions` | `map<string, string>` | When the RequestResources is the first in a stream, the initial*resource*versions must be populated. Otherwise, initial*resource*versions must be omitted. The keys are the resources names of the MCP resources known to the MCP client. The values in the map are the associated resource level version info. |
-| `responseNonce`           | `string`              | When the RequestResources is an ACK or NACK message in response to a previous RequestResources, the response*nonce must be the nonce in the RequestResources. Otherwise response*nonce must be omitted. |
-| `errorDetail`             | `google.rpc.Status`   | This is populated when the previously received resources could not be applied The *message* field in *error_details* provides the source internal error related to the failure. |
-| `incremental`             | `bool`                | Request an incremental update for the specified collection. The source may choose to honor this request or ignore and and provide a full-state update in the corresponding `Resource` response. |
+| `collection`              | `string`              | 正在请求的资源集合的类型，例如istio/networking/v1alpha3/VirtualService k8s// |
+| `initialResourceVersions` | `map<string, string>` | 当RequestResources是流中的第一个请求时，必须填充initial*resource*versions。 否则，必须省略initialresourceversions。 key是MCP客户端已知的MCP资源的资源名称。 map中的value是关联的资源级别版本信息。 |
+| `responseNonce`           | `string`              | 当RequestResources是响应先前RequestResources的ACK或NACK消息时，responsenonce必须是RequestResources中的nonce。 否则必须省略responsenonce。 |
+| `errorDetail`             | `google.rpc.Status`   | 当无法应用先前接收的资源时填充此信息。error_details中的 message 字段提供与故障相关的源内部错误。 |
+| `incremental`             | `bool`                | 请求指定集合的增量更新。 source可以选择遵守此请求或忽略并在相应的资源响应中提供完整状态更新。 |
 
-
+TBD： initialResourceVersions 是如何使用的？第一次请求时如何知道 资源版本？
 
 
 

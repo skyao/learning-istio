@@ -1,12 +1,10 @@
 ---
 date: 2018-09-30T16:00:00+08:00
 title: kiali词汇表
-weight: 722
+weight: 2022
 menu:
   main:
     parent: "kiali"
-keywords:
-- kiali概述
 description : "kiali词汇表"
 ---
 
