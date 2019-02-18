@@ -49,7 +49,26 @@ Resources不需要包含跟踪资源的完整快照。相反，它们是MCP客�
 | `nonce`             | `string`     | 必要参数。 nonce为 RequestChange 提供了一种唯一引用 RequestResources 的方法。 |
 | `incremental`       | `bool`       | 标识此资源响应是否是增量更新。如果接收器请求增量，源应该只发送增量更新。 |
 
+### RequestResources
 
+RequestResource可以在两种情况下发送：
+
+MCP双向更改流中的初始消息，和作为对先前资源的ACK或NACK响应。 在这种情况下，responsenonce设置为Resources中的nonce值。 ACK/NACK由errordetail的存在确定。
+
+- ACK (nonce!=“”,error_details==nil)
+- NACK (nonce!=“”,error_details!=nil)
+- New/Update request (nonce==“”,error_details ignored)
+
+| Field                     | Type                  | Description                                                  |
+| ------------------------- | --------------------- | ------------------------------------------------------------ |
+| `sinkNode`                | `SinkNode`            | 发起请求的 sink node                                         |
+| `collection`              | `string`              | 正在请求的资源集合的类型，例如istio/networking/v1alpha3/VirtualService k8s// |
+| `initialResourceVersions` | `map<string, string>` | 当RequestResources是流中的第一个请求时，必须填充initial*resource*versions。 否则，必须省略initialresourceversions。 key是MCP客户端已知的MCP资源的资源名称。 map中的value是关联的资源级别版本信息。 |
+| `responseNonce`           | `string`              | 当RequestResources是响应先前RequestResources的ACK或NACK消息时，responsenonce必须是RequestResources中的nonce。 否则必须省略responsenonce。 |
+| `errorDetail`             | `google.rpc.Status`   | 当无法应用先前接收的资源时填充此信息。error_details中的 message 字段提供与故障相关的源内部错误。 |
+| `incremental`             | `bool`                | 请求指定集合的增量更新。 source可以选择遵守此请求或忽略并在相应的资源响应中提供完整状态更新。 |
+
+TBD： initialResourceVersions 是如何使用的？第一次请求时如何知道 资源版本？
 
 ## 资源交换服务
 
@@ -77,32 +96,48 @@ source 是gRPC客户端的服务。 source 负责启动连接和打开流。
 rpc EstablishResourceStream(stream Resources) returns (stream RequestResources) {}
 ```
 
-### RequestResources
+## 聚合服务
 
-A RequestResource can be sent in two situations:
+### AggregatedMeshConfigService 
 
-Initial message in an MCP bidirectional change stream as an ACK or NACK response to a previous Resources. In this case the response*nonce is set to the nonce value in the Resources. ACK/NACK is determined by the presence of error*detail.
+聚合网格配置服务允许单个管理服务器通过单个gRPC流提供所有API更新。
 
-RequestResource可以在两种情况下发送：
+```protobuf
+service AggregatedMeshConfigService {
+  // StreamAggregatedResources提供了跨多种资源类型进行细致的排序更新的功能。 
+  // 单个流与多个独立的MeshConfigRequest/MeshConfigResponses序列一起使用，
+  // 这些序列通过类型URL复用。
+  rpc StreamAggregatedResources(stream MeshConfigRequest)
+      returns (stream MeshConfigResponse) {
+  }
 
-MCP双向更改流中的初始消息，和作为对先前资源的ACK或NACK响应。 在这种情况下，responsenonce设置为Resources中的nonce值。 ACK/NACK由errordetail的存在确定。
+  // IncrementalAggregatedResources 提供了增量更新客户端资源的功能。
+  // 这支持了MCP资源可扩展性的目标。
+  rpc IncrementalAggregatedResources(stream IncrementalMeshConfigRequest)
+      returns (stream IncrementalMeshConfigResponse) {
+  }
+}
+```
 
-- ACK (nonce!=“”,error_details==nil)
-- NACK (nonce!=“”,error_details!=nil)
-- New/Update request (nonce==“”,error_details ignored)
+### MeshConfigRequest
 
-| Field                     | Type                  | Description                                                  |
-| ------------------------- | --------------------- | ------------------------------------------------------------ |
-| `sinkNode`                | `SinkNode`            | 发起请求的 sink node                                         |
-| `collection`              | `string`              | 正在请求的资源集合的类型，例如istio/networking/v1alpha3/VirtualService k8s// |
-| `initialResourceVersions` | `map<string, string>` | 当RequestResources是流中的第一个请求时，必须填充initial*resource*versions。 否则，必须省略initialresourceversions。 key是MCP客户端已知的MCP资源的资源名称。 map中的value是关联的资源级别版本信息。 |
-| `responseNonce`           | `string`              | 当RequestResources是响应先前RequestResources的ACK或NACK消息时，responsenonce必须是RequestResources中的nonce。 否则必须省略responsenonce。 |
-| `errorDetail`             | `google.rpc.Status`   | 当无法应用先前接收的资源时填充此信息。error_details中的 message 字段提供与故障相关的源内部错误。 |
-| `incremental`             | `bool`                | 请求指定集合的增量更新。 source可以选择遵守此请求或忽略并在相应的资源响应中提供完整状态更新。 |
+MeshConfigRequest为给定客户端请求一组相同类型的版本化资源。
 
-TBD： initialResourceVersions 是如何使用的？第一次请求时如何知道 资源版本？
+| Field           | Type                | Description                                                  |
+| --------------- | ------------------- | ------------------------------------------------------------ |
+| `versionInfo`   | `string`            | 请求消息中提供的 versioninfo 使用最近成功处理的响应接收的versioninfo，或者是第一个请求则设置为空。预期在收到响应之后不会发送新请求，直到客户端实例准备好对新配置进行ACK/NACK。 通过分别返回应用的新API配置版本或先前的API配置版本来进行ACK/NACK。 每个type_url（见下文）都有一个与之关联的独立版本。 |
+| `sinkNode`      | `SinkNode`          | 发起请求的 sink node                                         |
+| `typeUrl`       | `string`            | 正在请求的资源的类型, e.g. “type.googleapis.com/istio.io.networking.v1alpha3.VirtualService”. |
+| `responseNonce` | `string`            | 对应于MeshConfigResponse的nonce，进行ACK / NACK。 请参阅上面有关version_info和MeshConfigResponse nonce注释的讨论。 如果没有可用的nonce，这可能是空的，例如，在启动时。 |
+| `errorDetail`   | `google.rpc.Status` | 当前一个MeshConfigResponse无法更新配置时，将填充此选项。 error_details中的message字段提供与失败相关的客户端内部异常。 它仅供手动调试时使用，不保证在客户端版本中提供的字符串是稳定的。 |
 
+### MeshConfigResponse
 
+MeshConfigResponse提供一组相同类型的版本化资源以响应MeshConfigRequest。
 
-
-
+| Field         | Type         | Description                                                  |
+| ------------- | ------------ | ------------------------------------------------------------ |
+| `versionInfo` | `string`     | 响应数据的版本。                                             |
+| `resources`   | `Resource[]` | 包含在公共MCP *Resource* 消息中的响应资源。                  |
+| `typeUrl`     | `string`     | 包含在提供的资源中的资源类型URL。 如果资源非空，这必须与包装器消息中的type_url一致。 |
+| `nonce`       | `string`     | nonce提供了一种在后续的MeshConfigRequest中显式地ACK特定MeshConfigResponse的方法。 客户端可能已经在此MeshConfigResponse之前的流上向管理服务器发送了其他消息，这些消息在响应发送时未被处理。 nonce允许管理服务器忽略先前版本的任何进一步的MeshConfigRequests，直到带有nonce的MeshConfigRequest。 |
