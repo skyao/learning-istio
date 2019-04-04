@@ -1,7 +1,7 @@
 ---
 date: 2018-09-29T20:00:00+08:00
-title: 资料
-weight: 101
+title: 资料收集
+weight: 109
 menu:
   main:
     parent: "introduction"
