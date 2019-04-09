@@ -144,6 +144,14 @@ googleAnalytics = "c7442f5794ea2abb71c6ff05dc0b8779"
 	weight = 600
 
 [[menu.main]]
+	name   = "Galley的设计"
+	identifier = "galley-design"
+	parent = "galley"
+	url    = "/galley/design"
+	weight = 610
+
+
+[[menu.main]]
 	name   = "Mixer"
 	identifier = "mixer"
 	url    = "/mixer/"
