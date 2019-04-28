@@ -158,6 +158,13 @@ googleAnalytics = "c7442f5794ea2abb71c6ff05dc0b8779"
 	weight = 700
 
 [[menu.main]]
+	name   = "Mixer设计"
+	identifier = "mixer-design"
+	parent = "mixer"
+	url    = "/mixer/design/"
+	weight = 710
+
+[[menu.main]]
 	name   = "Proxy"
 	identifier = "proxy"
 	url    = "/proxy/"
