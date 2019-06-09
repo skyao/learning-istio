@@ -28,16 +28,11 @@ minikube start --docker-env http_proxy=http://192.168.31.152:8123 --docker-env h
 
 ## 准备istio
 
-参考：
-
-- https://istio.io/docs/setup/kubernetes/download-release/
-- https://istio.io/docs/setup/kubernetes/quick-start/
-
-在linux上执行以下命令：
+在 istio 的 [github release 页面](https://github.com/istio/istio/releases/) 找到需要的istio版本，下载并解压缩：
 
 ```bash
-curl -L https://git.io/getLatestIstio | sh -
-sudo mv istio-1.0.5/ $HOME/work/soft/istio/
+curl -L https://github.com/istio/istio/releases/download/1.1.8/istio-1.1.8-linux.tar.gz | tar xz
+mv istio-1.1.8/ $HOME/work/soft/istio/
 ```
 
 修改`~/.bashrc`，加入以下内容：
@@ -51,9 +46,9 @@ export PATH="$PATH:/home/sky/work/soft/istio/bin"
 
 ```bash
 $ istioctl version
-Version: 1.0.5
-GitRevision: c1707e45e71c75d74bf3a5dec8c7086f32f32fad
-User: root@6f6ea1061f2b
+Version: 1.0.8
+GitRevision: 11b640bb11593138a904f81e572d40e5e70b089b
+User: root@d76cad0a-8935-11e9-887b-0a580a2c0403
 Hub: docker.io/istio
 GolangVersion: go1.10.4
 BuildStatus: Clean
@@ -61,10 +56,14 @@ BuildStatus: Clean
 
 ## 安装istio核心
 
-先安装istio的CRD：
+先安装istio的CRD，日常验证用最简单的方式安装所有的crd：
 
 ```bash
+# 1.1版本之前
 kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml
+
+# 1.1版本之后
+for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl apply -f $i; done
 ```
 
 简单起见，不做双向认证。
@@ -79,5 +78,7 @@ kubectl apply -f install/kubernetes/istio-demo.yaml
 kubectl get svc -n istio-system
 kubectl get pods -n istio-system
 ```
+
+> 备注：如果遇到 mixer 的pod总是 crash，可以检查是不是 coredns 在CrashLoopBackOff。
 
 

@@ -17,11 +17,15 @@ description : "运行bookinfo示例"
 - https://istio.io/docs/examples/bookinfo/
 
 ```bash
+kubectl label namespace default istio-injection=enabled
+
 kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
 
 # 验证
 kubectl get services
 kubectl get pods
+# 检查一下pod，看istio的sidecar自动注入是否成功
+kubectl describe pod details-v1-65b966b497-clvzh
 ```
 
 ### 检验ingress ip 和 端口
