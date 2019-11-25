@@ -65,6 +65,13 @@ googleAnalytics = "c7442f5794ea2abb71c6ff05dc0b8779"
 	weight = 100
 
 [[menu.main]]
+	name   = "版本发布"
+	identifier = "introduction-release"
+	parent = "introduction"
+	url    = "/introduction/release/"
+	weight = 120
+
+[[menu.main]]
 	name   = "安装"
 	identifier = "installation"
 	url    = "/installation/"
