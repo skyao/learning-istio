@@ -1,9 +1,9 @@
 ---
-title: Istio学习笔记
+title: 培训操作手册
 ---
 
-{{< blocks/cover title="Istio学习笔记" image_anchor="top" height="full" >}}
-<a class="btn btn-lg btn-primary me-3 mb-4" href="/docs/">
+{{< blocks/cover title="培训操作手册" image_anchor="top" height="full" >}}
+<a class="btn btn-lg btn-primary me-3 mb-4" href="/training/">
   阅读笔记内容 <i class="fas fa-arrow-alt-circle-right ms-2"></i>
 </a>
 <a class="btn btn-lg btn-secondary me-3 mb-4" href="https://github.com/skyao/learning-istio">
